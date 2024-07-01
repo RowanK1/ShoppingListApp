@@ -20,8 +20,8 @@ fun ShoppingListNavHost(
         navController = navController,
         startDestination = ShoppingListsDestination.route,
         modifier = modifier
-    ){
-        composable(route = ShoppingListsDestination.route){
+    ) {
+        composable(route = ShoppingListsDestination.route) {
             ShoppingListsScreen(
                 navigateToShoppingItems =
                 {
@@ -31,8 +31,8 @@ fun ShoppingListNavHost(
         }
         composable(
             route = "${ShoppingItemsDestination.route}/{shoppingListId}",
-            arguments = listOf(navArgument("shoppingListId") {type = NavType.StringType})
-        ){
+            arguments = listOf(navArgument("shoppingListId") { type = NavType.StringType })
+        ) {
             ShoppingItemsScreen()
 
         }
@@ -40,6 +40,7 @@ fun ShoppingListNavHost(
     }
 
 }
+
 @Composable
 fun ShoppingListApp() {
     val navController = rememberNavController()

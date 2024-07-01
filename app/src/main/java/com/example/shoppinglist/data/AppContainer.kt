@@ -8,7 +8,7 @@ interface AppContainer {
     val shoppingListRepository: ShoppingListRepository
 }
 
-class DefaultAppContainer: AppContainer{
+class DefaultAppContainer : AppContainer {
     private val firestoreService = FirestoreService()
 
     override val shoppingListRepository: ShoppingListRepository by lazy {

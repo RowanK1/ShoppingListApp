@@ -12,18 +12,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-data class ShoppingItemsScreenUiState(val list : ShoppingList)
+data class ShoppingItemsScreenUiState(val list: ShoppingList)
 
-class ShoppingItemsScreenViewModel (savedStateHandle: SavedStateHandle, private val shoppingListRepository : ShoppingListRepository): ViewModel() {
+class ShoppingItemsScreenViewModel(
+    savedStateHandle: SavedStateHandle,
+    shoppingListRepository: ShoppingListRepository
+) : ViewModel() {
     private val TIMEOUT_MILLIS = 5_000L
 
     private val shoppingListId: String = checkNotNull(savedStateHandle["shoppingListId"])
 
-    val uiState: StateFlow<ShoppingItemsScreenUiState> = shoppingListRepository.getShoppingItemsStream(listId = shoppingListId).map { ShoppingItemsScreenUiState(it!!) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = ShoppingItemsScreenUiState(ShoppingList())
-        )
+    val uiState: StateFlow<ShoppingItemsScreenUiState> =
+        shoppingListRepository.getShoppingItemsStream(listId = shoppingListId)
+            .map { ShoppingItemsScreenUiState(it!!) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = ShoppingItemsScreenUiState(ShoppingList())
+            )
 }
 

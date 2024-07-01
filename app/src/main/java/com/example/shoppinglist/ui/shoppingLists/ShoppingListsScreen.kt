@@ -1,6 +1,5 @@
 package com.example.shoppinglist.ui.shoppingLists
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,25 +22,29 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.shoppinglist.R
-import com.example.shoppinglist.data.Item
 import com.example.shoppinglist.data.ShoppingList
 import com.example.shoppinglist.ui.AppViewModelProvider
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListsScreen(
     navigateToShoppingItems: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ShoppingListsScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
-){
+) {
     val uiState by viewModel.uiState.collectAsState()
-    Scaffold (
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text(text = stringResource(R.string.shopping_lists_title)) })
+        },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {viewModel.addShoppingListTest()},
+                onClick = { viewModel.addShoppingListTest() },
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
             ) {
@@ -50,20 +54,24 @@ fun ShoppingListsScreen(
                 )
             }
         }
-    ){innerPadding ->
+    ) { innerPadding ->
         ShoppingLists(
             shoppingLists = uiState.shoppingLists,
-            onItemClick = {navigateToShoppingItems(it)},
+            onItemClick = { navigateToShoppingItems(it) },
             modifier = Modifier.padding(innerPadding)
         )
-        Text(text = "Shopping Lists")
 
     }
 }
+
 @Composable
-private fun ShoppingLists(shoppingLists: List<ShoppingList>, onItemClick: (String) -> Unit, modifier: Modifier = Modifier){
+private fun ShoppingLists(
+    shoppingLists: List<ShoppingList>,
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(modifier = modifier) {
-        items(items = shoppingLists, key = {it.id}){item ->
+        items(items = shoppingLists, key = { it.id }) { item ->
             ShoppingList(
                 shoppingList = item,
                 modifier = Modifier

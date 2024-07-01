@@ -12,18 +12,20 @@ import kotlinx.coroutines.flow.stateIn
 
 data class ShoppingListsScreenUiState(val shoppingLists: List<ShoppingList> = listOf())
 
-class ShoppingListsScreenViewModel(private val shoppingListRepository : ShoppingListRepository): ViewModel() {
+class ShoppingListsScreenViewModel(private val shoppingListRepository: ShoppingListRepository) :
+    ViewModel() {
     private val TIMEOUT_MILLIS = 5_000L
 
-    val uiState: StateFlow<ShoppingListsScreenUiState> = shoppingListRepository.getAllShoppingListsStream().map { ShoppingListsScreenUiState(it) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = ShoppingListsScreenUiState()
-        )
+    val uiState: StateFlow<ShoppingListsScreenUiState> =
+        shoppingListRepository.getAllShoppingListsStream().map { ShoppingListsScreenUiState(it) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = ShoppingListsScreenUiState()
+            )
 
     fun addShoppingListTest() {
-        shoppingListRepository.addShoppingList(ShoppingList("","", listOf()))
+        shoppingListRepository.addShoppingList(ShoppingList("", "", listOf()))
     }
 }
 
