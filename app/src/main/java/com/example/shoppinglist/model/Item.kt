@@ -1,4 +1,4 @@
-package com.example.shoppinglist.data
+package com.example.shoppinglist.model
 
 data class Item(
     val id: String = "",

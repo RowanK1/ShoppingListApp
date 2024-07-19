@@ -1,13 +1,7 @@
 package com.example.shoppinglist
 
 import android.app.Application
-import com.example.shoppinglist.data.AppContainer
-import com.example.shoppinglist.data.DefaultAppContainer
+import dagger.hilt.android.HiltAndroidApp
 
-class ShoppingListApplication : Application() {
-    lateinit var container: AppContainer
-    override fun onCreate() {
-        super.onCreate()
-        container = DefaultAppContainer()
-    }
-}
+@HiltAndroidApp
+class ShoppingListApplication : Application() {}

@@ -3,18 +3,19 @@ package com.example.shoppinglist.ui.shoppingListItems
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shoppinglist.data.Item
-import com.example.shoppinglist.data.ShoppingList
+import com.example.shoppinglist.model.ShoppingList
 import com.example.shoppinglist.data.ShoppingListRepository
-import com.example.shoppinglist.ui.shoppingLists.ShoppingListsScreenUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 data class ShoppingItemsScreenUiState(val list: ShoppingList)
 
-class ShoppingItemsScreenViewModel(
+@HiltViewModel
+class ShoppingItemsScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     shoppingListRepository: ShoppingListRepository
 ) : ViewModel() {

@@ -1,6 +1,8 @@
 package com.example.shoppinglist.data
 
 import android.util.Log
+import com.example.shoppinglist.model.Item
+import com.example.shoppinglist.model.ShoppingList
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.snapshots

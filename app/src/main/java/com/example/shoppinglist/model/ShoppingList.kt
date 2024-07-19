@@ -1,4 +1,4 @@
-package com.example.shoppinglist.data
+package com.example.shoppinglist.model
 
 import com.google.firebase.firestore.DocumentId
 

@@ -24,10 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.shoppinglist.model.ShoppingList
 import com.example.shoppinglist.R
-import com.example.shoppinglist.data.ShoppingList
-import com.example.shoppinglist.ui.AppViewModelProvider
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +34,7 @@ import com.example.shoppinglist.ui.AppViewModelProvider
 fun ShoppingListsScreen(
     navigateToShoppingItems: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ShoppingListsScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: ShoppingListsScreenViewModel = hiltViewModel<ShoppingListsScreenViewModel>()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(

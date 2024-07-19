@@ -1,5 +1,6 @@
 package com.example.shoppinglist.data
 
+import com.example.shoppinglist.model.ShoppingList
 import kotlinx.coroutines.flow.Flow
 
 interface DatabaseService {

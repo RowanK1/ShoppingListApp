@@ -1,6 +1,5 @@
 package com.example.shoppinglist.ui.shoppingListItems
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,15 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.shoppinglist.model.Item
 import com.example.shoppinglist.R
-import com.example.shoppinglist.data.Item
-import com.example.shoppinglist.ui.AppViewModelProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingItemsScreen(
-    viewModel: ShoppingItemsScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: ShoppingItemsScreenViewModel = hiltViewModel<ShoppingItemsScreenViewModel>()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
