@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.shoppinglist.model.Item
 import com.example.shoppinglist.model.ShoppingList
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.snapshots
 import com.google.firebase.firestore.toObject
@@ -29,7 +30,11 @@ class FirestoreService : DatabaseService {
         return stream
     }
 
-    override fun addShoppingItemList(list: ShoppingList) {
+    override fun addShoppingList(shoppingListName: String) {
+        shoppingListRef.add(ShoppingList(name = shoppingListName))
+    }
+
+    fun addShoppingItemListTest() {
         val testList = ShoppingList(
             name = "TestList1", itemList = listOf(
                 Item(name = "Bread", checked = true),
@@ -45,5 +50,9 @@ class FirestoreService : DatabaseService {
             .addOnFailureListener { e ->
                 Log.w("Firestore", "Error adding document", e)
             }
+    }
+
+    override fun addShoppingItem(item: Item, shoppingListId: String) {
+        shoppingListRef.document(shoppingListId).update("itemList", FieldValue.arrayUnion(item))
     }
 }

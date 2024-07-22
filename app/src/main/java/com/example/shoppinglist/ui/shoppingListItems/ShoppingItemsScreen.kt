@@ -6,17 +6,28 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,10 +42,30 @@ fun ShoppingItemsScreen(
     viewModel: ShoppingItemsScreenViewModel = hiltViewModel<ShoppingItemsScreenViewModel>()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val showAddItemDialog = remember { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Items") }) }
-    ) { innerPadding ->
+    Scaffold(topBar = { TopAppBar(title = { Text(text = "Items") }) }, floatingActionButton = {
+        FloatingActionButton(
+            onClick = { showAddItemDialog.value = true },
+            shape = MaterialTheme.shapes.medium,
+            modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add, contentDescription = "ADD"
+            )
+        }
+    }) { innerPadding ->
+
+        if (showAddItemDialog.value) {
+            AddItemDialog(onDismissRequest = {
+                showAddItemDialog.value = false
+                viewModel.updateNewItemName("")
+            },
+                newItemName = viewModel.newItemName,
+                onNewItemNameChange = { newItemName -> viewModel.updateNewItemName(newItemName) },
+                onConfirmClick = { newItemName -> viewModel.addNewItem(newItemName) })
+        }
+
         ShoppingListItems(
             itemList = uiState.list.itemList,
             onItemClick = {},
@@ -64,8 +95,7 @@ private fun ShoppingListItem(
     item: Item, modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        modifier = modifier, elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
@@ -80,6 +110,47 @@ private fun ShoppingListItem(
     }
 }
 
+@Composable
+fun AddItemDialog(
+    onDismissRequest: () -> Unit,
+    newItemName: String,
+    onNewItemNameChange: (String) -> Unit,
+    onConfirmClick: (String) -> Unit
+) {
+    AlertDialog(title = {
+        Text(text = "Add a new item")
+    }, text = {
+        OutlinedTextField(value = newItemName, onValueChange = { onNewItemNameChange(it) })
+    }, onDismissRequest = {
+        onDismissRequest()
+    }, confirmButton = {
+        TextButton(onClick = {
+            onConfirmClick(newItemName)
+            onDismissRequest()
+        }) {
+            Text("Add")
+        }
+    }, dismissButton = {
+        TextButton(onClick = {
+            onDismissRequest()
+        }) {
+            Text("Cancel")
+        }
+    })
+}
+
+@Preview
+@Composable
+fun AddItemDialogPreview() {
+    val showAddItemDialog = remember { mutableStateOf(true) }
+
+    if (showAddItemDialog.value) {
+        AddItemDialog(onDismissRequest = { showAddItemDialog.value = false },
+            newItemName = "TEST",
+            onNewItemNameChange = {},
+            onConfirmClick = {})
+    }
+}
 
 @Preview(showBackground = true)
 @Composable

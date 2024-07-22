@@ -1,5 +1,6 @@
 package com.example.shoppinglist.data
 
+import com.example.shoppinglist.model.Item
 import com.example.shoppinglist.model.ShoppingList
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -10,7 +11,9 @@ interface ShoppingListRepository {
 
     fun getShoppingItemsStream(listId: String): Flow<ShoppingList?>
 
-    fun addShoppingList(shoppingList: ShoppingList)
+    fun addShoppingList(shoppingListName: String)
+
+    fun addShoppingItem(item: Item, shoppingListId: String)
 }
 
 class FirestoreShoppingListRepository @Inject constructor(
@@ -22,9 +25,12 @@ class FirestoreShoppingListRepository @Inject constructor(
     override fun getShoppingItemsStream(listId: String): Flow<ShoppingList?> =
         databaseService.getShoppingItems(listId)
 
-    override fun addShoppingList(shoppingList: ShoppingList) {
-        databaseService.addShoppingItemList(shoppingList)
+    override fun addShoppingList(shoppingListName: String) {
+        databaseService.addShoppingList(shoppingListName)
     }
 
+    override fun addShoppingItem(item: Item, shoppingListId: String) {
+        databaseService.addShoppingItem(item, shoppingListId)
+    }
 
 }
